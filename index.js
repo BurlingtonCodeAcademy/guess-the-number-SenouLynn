@@ -78,7 +78,7 @@ function smartNum(min, max) {
 
 //Is numGuess your number?//
 async function compPickLoop() {
-  numGuess = pickNum(minRange, maxRange);
+  numGuess = smartNum(minRange, maxRange);
   //numGuess = smartNum(minRange, maxRange);
 
   compPick = await ask("Is " + numGuess + " your number?\n");
@@ -88,10 +88,7 @@ async function compPickLoop() {
     compPick === "NO" ||
     compPick === "no"
   ) {
-    //console.log check block start//
-    console.log("minRange is " + minRange);
-    console.log("maxRange is " + maxRange);
-    //console.log check block end//
+
     guessWrongLoop();
   } else if (
     compPick === "y" ||
@@ -120,10 +117,7 @@ async function guessWrongLoop() {
   ) {
     minRange = numGuess;
     
-    //console.log check block start//
-    console.log("minRange is " + minRange);
-    console.log("maxRange is " + maxRange);
-    //console.log check block end//
+
 
     compPickLoop();
     //loopCheckRange();
