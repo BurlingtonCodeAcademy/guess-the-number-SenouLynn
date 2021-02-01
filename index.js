@@ -8,7 +8,7 @@ function ask(questionText) {
   });
 }
 
-start();
+gamePick();
 //Variable Declarations
 let maxRange;
 let minRange;
@@ -16,6 +16,22 @@ let numGuess;
 let compPick = "";
 
 //Game Start
+//Start will have you pick the number
+//PlayerStart will have the computer pick the number
+
+async function gamePick() {
+  let startTree = await ask ("Let's play a game where either you or I will pick a number and the opposite person will try and guess it. If you would like to guess the number I pick, type 'Me'. If you would like me to guess your number, type 'You'.\n")
+  if (startTree === "Me") {
+    start()
+  } else if (startTree === "You") {
+    playerStart()
+  } else {
+    console.log("Please type either 'Me' or 'You\n")
+    gamePick()
+  }
+}
+
+
 async function start() {
   console.log(
     "Let's play a game where you (Big BAUSE) make up a number and I (BeepBoopMachine) try to guess it. \n"
@@ -49,7 +65,7 @@ async function rangeCheck() {
     guessRightLoop();
   } else if (minRange < maxRange) {
     console.log(
-      `Okay cool, I can only guess numbers between ` +
+      `Okay cool, the range will be between ` +
         minRange +
         ` and ` +
         maxRange +
@@ -75,10 +91,9 @@ function smartNum(min, max) {
 }
 
 //switch pickNum to smartNum to toggle number picker function below //
-
 //Is numGuess your number?//
 async function compPickLoop() {
-  numGuess = smartNum(minRange, maxRange);
+  numGuess = pickNum(minRange, maxRange);
   //numGuess = smartNum(minRange, maxRange);
 
   compPick = await ask("Is " + numGuess + " your number?\n");
@@ -96,6 +111,7 @@ async function compPickLoop() {
     compPick === "YES" ||
     compPick === "yes"
   ) {
+    console.log("I got it you little shit.");
     guessRightLoop();
   } else {
     console.log(
@@ -141,7 +157,7 @@ async function guessWrongLoop() {
 
 //Right Guess Loop - start again or exit//
 async function guessRightLoop() {
-  console.log("I got it you little shit.");
+
   let startAgain = await ask("Would you like to play again?\n");
   if (
     startAgain === "y" ||
@@ -149,7 +165,7 @@ async function guessRightLoop() {
     startAgain === "YES" ||
     startAgain === "yes"
   ) {
-    start();
+    gamePick();
   } else if (
     startAgain === "n" ||
     startAgain === "No" ||
@@ -180,4 +196,73 @@ function loopCheckRange () {
     console.log("It looks like your range makes no sense. Lets try it again\n");
     guessWrongLoop();
 }
+}
+
+
+
+//2nd part of the game - You try and guess the computer's number
+let playerMinRange;
+let playerMaxRange;
+let compNum;
+let compNumInt;
+
+async function playerStart() {
+  console.log(
+    "I'm going to guess a number. Let's figure out how hard you want to make it"
+  );
+  playerMaxRange = await ask("What's the highest number I can set?\n");
+  playerMinRange = await ask("What's the lowest number I can set?\n");
+  compNum = pickNum(playerMinRange, playerMaxRange);
+  compNumInt = Number(compNum);
+  console.log("Computer picks " + compNumInt);
+  playerPick();
+}
+
+//Random number picker within range (inclusive) //
+function pickNum(min, max) {
+  let range = max - min + 1;
+  let randInt = min + Math.floor(Math.random() * range);
+  return randInt;
+}
+
+//Guessing Block
+async function playerPick() {
+  while (true) {
+    let playerGuess = await ask("Guess a number.\n");
+    let playerNum = Number(playerGuess);
+    if (playerNum > compNumInt) {
+      console.log("Your guess is too high.");
+    } else if (playerGuess < compNumInt) {
+      console.log("Your guess is too low.");
+    } else if (playerGuess == compNumInt) {
+      console.log("You guessed right! Winner winner chicken dinner BOI!");
+      guessRightLoop();
+    }
+  }
+}
+
+
+
+
+
+//FIGURE OUT HOW TO INCORPORATE RANGE CHECK
+//NOT FUNCTIONAL BELOW THIS LINE
+
+async function playerRangeCheck() {
+  if (minRange > maxRange) {
+    console.log("It looks like your range makes no sense. Lets try it again\n");
+    setInitRange();
+  } else if (minRange === maxRange) {
+    console.log("Well it seems as if " + minRange + " is your number\n");
+    guessRightLoop();
+  } else if (minRange < maxRange) {
+    console.log(
+      `Okay cool, the range will be between ` +
+        minRange +
+        ` and ` +
+        maxRange +
+        `. Let us begin.`
+    );
+    playerPick();
+  }
 }
