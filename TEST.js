@@ -59,7 +59,6 @@ async function rangeCheck() {
   }
 }
 
-
 //Random number picker within range (inclusive) //
 function pickNum(min, max) {
   let range = max - min + 1;
@@ -73,8 +72,6 @@ function smartNum(min, max) {
   let midInt = Math.floor(range/2);
   return midInt;
 }
-
-//switch pickNum to smartNum to toggle number picker function below //
 
 //Is numGuess your number?//
 async function compPickLoop() {
@@ -167,9 +164,6 @@ async function guessRightLoop() {
   }
 }
 
-
-
-//Work in Progress - not quite working how I want it too//
 //Loop check range//
 function loopCheckRange () {
   if (minRange < maxRange) {
